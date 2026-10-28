@@ -1,12 +1,15 @@
 from datetime import datetime
+from typing import TYPE_CHECKING
 from uuid import uuid4
 
-from sqlalchemy import String, DateTime, Integer
+from sqlalchemy import String, DateTime, Integer, func
 from sqlalchemy.dialects.postgresql.base import UUID
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 
-from app.models import Base
-from app.models.chunk import Chunk
+from app.models.base import Base
+
+if TYPE_CHECKING:
+    from app.models.chunk import Chunk
 
 
 class Document(Base):
@@ -27,6 +30,6 @@ class Document(Base):
     file_name: Mapped[str] = mapped_column(String, nullable=False)
     page_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     chunk_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
-    created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False, default=datetime.now())
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, server_default=func.now())
 
-    chunks: Mapped[list[Chunk]] = relationship(back_populates="document", cascade="all, delete-orphan")
+    chunks: Mapped[list["Chunk"]] = relationship(back_populates="document", cascade="all, delete-orphan")

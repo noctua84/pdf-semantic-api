@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 _PROJECT_PATH = Path(__file__).parent.parent
@@ -7,9 +8,10 @@ _PROJECT_PATH = Path(__file__).parent.parent
 class Settings(BaseSettings):
     # Ollama
     ollama_base_url: str = "http://localhost:11434"
-    ollama_embed_model: str = "qwen3-embedding:0.6b"
-    ollama_chat_model: str
+    ollama_embed_model: str = Field("qwen3-embedding:0.6b", min_length=1)
+    ollama_chat_model: str = Field(..., min_length=1)
     embedding_dimensions: int = 1024 # embedding dimensions for qwen3 embedding models
+    temperature: float = 0.1
 
     # App
     app_name: str = "pdf semantic search"
@@ -20,6 +22,7 @@ class Settings(BaseSettings):
     # Ingestion
     chunk_size: int = 1000
     chunk_overlap: int = 200
+    embed_batch_size: int = Field(32, ge=1)  # number of chunks sent per /api/embed request
 
     # Database
     database_url: str

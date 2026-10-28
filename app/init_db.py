@@ -16,3 +16,7 @@ def init_db() -> None:
         conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
 
     Base.metadata.create_all(bind=engine)
+
+
+if __name__ == "__main__":
+    init_db()

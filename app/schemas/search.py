@@ -1,3 +1,4 @@
+from typing import Annotated
 from uuid import UUID
 
 from pydantic import BaseModel, Field
@@ -29,21 +30,23 @@ class SearchRequest(BaseModel):
         description="Whether to generate an answer to the query",
     )
 
-    temperature: float = Field(
-        default=0.7,
-        description="The temperature to use for the answer generation",
-        ge=0,
-        le=1,
+    temperature: Annotated[float, Field(ge=0, le=1)] | None = Field(
+        default=None,
+        description="Sampling temperature for answer generation. Omit to use the configured TEMPERATURE setting.",
     )
 
 
 class SearchMatch(BaseModel):
     document_id: UUID
     file_name: str
-    page: int | None = None
+    page: int | None = Field(default=None, description="1-based page number the chunk came from.")
     chunk_index: int = Field(ge=0)
     text: str
-    score: float = Field(ge=0, le=1)
+    score: float = Field(
+        ge=-1,
+        le=1,
+        description="Cosine similarity between the query and this chunk; 1 is identical.",
+    )
 
 
 class SearchResponse(BaseModel):

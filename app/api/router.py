@@ -1,12 +1,8 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 
-from app.client.ollama import OllamaClient
-from app.config import settings
-
-ollama_client = OllamaClient(
-    base_url=settings.ollama_base_url,
-    embed_model=settings.ollama_embed_model,
-    chat_model=settings.ollama_chat_model,
-)
+from app.api import ingest_pdf, search_pdf
 
 router = APIRouter()
+
+router.include_router(ingest_pdf.router, tags=["ingest"])
+router.include_router(search_pdf.router, tags=["search"])

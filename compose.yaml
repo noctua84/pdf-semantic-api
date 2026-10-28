@@ -1,0 +1,21 @@
+services:
+  db:
+    image: pgvector/pgvector:pg18
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: pdf
+      POSTGRES_PASSWORD: pdf
+      POSTGRES_DB: pdf_semantic
+    ports:
+      # Published on 55432, not 5432, so it never collides with a local Postgres install.
+      - "55432:5432"
+    volumes:
+      - pdf_semantic_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pdf -d pdf_semantic"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pdf_semantic_data:
