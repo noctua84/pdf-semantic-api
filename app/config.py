@@ -21,6 +21,9 @@ class Settings(BaseSettings):
     chunk_size: int = 1000
     chunk_overlap: int = 200
 
+    # Database
+    database_url: str
+
 
     model_config = SettingsConfigDict(env_file=_PROJECT_PATH/".env", env_file_encoding="utf-8", extra="ignore")
 
