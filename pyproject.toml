@@ -9,7 +9,7 @@ dependencies = [
     "psycopg[binary]>=3.3.6",
     "pydantic>=2.14.1",
     "pydantic-settings>=2.16.1",
-    "pypdf>=6.21.3",
+    "pypdf>=6.21.4",
     "python-dotenv>=1.2.4",
     "sqlalchemy>=2.1.6",
 ]
